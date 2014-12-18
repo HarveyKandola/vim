@@ -11,9 +11,10 @@ Plugin 'altercation/vim-colors-solarized'
 Plugin 'godlygeek/tabular'
 PLugin 'tpope/vim-surround.git'
 Plugin 'kien/ctrlp.vim'
-Plugin 'Valloric/YouCompleteMe'
+"Plugin 'Valloric/YouCompleteMe'
+"Plugin 'ervandew/supertab'
 Plugin 'fatih/vim-go'
-Plugin 'groenewege/vim-less'
+"Plugin 'groenewege/vim-less'
 Plugin 'mklabs/grunt.vim'
 Plugin 'vim-scripts/sessionman.vim'
 Plugin 'vim-scripts/Auto-Pairs.git'
@@ -21,8 +22,8 @@ Plugin 'rking/ag.vim'
 Plugin 'docunext/closetag.vim'
 
 call vundle#end()
-filetype plugin indent on  
 
+filetype plugin indent on  
 syntax enable                   " enable as opposed to on (keeps theme colors)
 set encoding=utf-8
 set showcmd                     " display incomplete commands
@@ -51,6 +52,12 @@ set iskeyword-=#                    " '#' is an end of word designator
 set iskeyword-=-                    " '-' is an end of word designator
 set showmatch                   " Show matching brackets/parenthesis
 set autoindent
+set completeopt-=preview
+set cmdheight=2
+set guitablabel=\[%N\]\ %t\ %M
+set nobackup
+set nowb
+set noswapfile
 
 set background=dark
 colorscheme solarized
@@ -74,8 +81,5 @@ let g:ctrlp_match_window = 'bottom,order:ttb'
 let g:gitgutter_sign_column_always = 1
 set wildignore+=*/tmp/*,*.so,*.swp,call.min.js,all.min.css
 set omnifunc=syntaxcomplete#Complete
+inoremap <C-Space> <C-x><C-o>
 
-" Turn backup off, since most stuff is in SVN, git et.c anyway...
-set nobackup
-set nowb
-set noswapfile
