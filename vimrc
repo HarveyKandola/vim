@@ -11,9 +11,8 @@ Plugin 'altercation/vim-colors-solarized'
 Plugin 'godlygeek/tabular'
 PLugin 'tpope/vim-surround.git'
 Plugin 'kien/ctrlp.vim'
-"Plugin 'Valloric/YouCompleteMe'
+Plugin 'Valloric/YouCompleteMe'
 Plugin 'fatih/vim-go'
-Plugin 'lunaru/vim-less'
 Plugin 'mklabs/grunt.vim'
 Plugin 'vim-scripts/sessionman.vim'
 Plugin 'vim-scripts/Auto-Pairs.git'
@@ -81,4 +80,3 @@ let g:gitgutter_sign_column_always = 1
 set wildignore+=*/tmp/*,*.so,*.swp,call.min.js,all.min.css
 set omnifunc=syntaxcomplete#Complete
 inoremap <C-Space> <C-x><C-o>
-
