@@ -57,7 +57,7 @@ set showmatch                                              " Show matching brack
 set autoindent
 set completeopt-=preview
 set cmdheight=2                                            " the height of the command line
-set guitablabel=\[%N\]\ %t\ %M
+set guitablabel=%N\ \ %t\ %M
 set nobackup                                               " no backup/swap files
 set nowb
 set noswapfile
@@ -119,4 +119,8 @@ inoremap <expr> <C-n> pumvisible() ? '<C-n>' :
 inoremap <expr> <M-,> pumvisible() ? '<C-n>' :
   \ '<C-x><C-o><C-n><C-p><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
 
+" default handling of Markdown files
+autocmd BufNewFile,BufReadPost *.md set filetype=markdown
+" get rid of background color when highlighing brackets
+hi MatchParen guibg=NONE guifg=YELLOW
 
