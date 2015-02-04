@@ -23,6 +23,7 @@ Plugin 'jelera/vim-javascript-syntax'
 Plugin 'pangloss/vim-javascript'
 Plugin 'groenewege/vim-less'
 Plugin 'eiginn/netrw'
+Plugin 'docker/docker', {'rtp': '/contrib/syntax/vim/'}
 
 call vundle#end()
 
@@ -31,8 +32,19 @@ syntax enable                                              " enable as opposed t
 set encoding=utf-8
 set showcmd                                                " display incomplete commands
 set nowrap                                                 " don't wrap lines
-set tabstop=4 shiftwidth=4                                 " a tab is two spaces (or set this to 4)
-set expandtab                                              " use spaces, not tabs (optional)
+"set copyindent
+"set preserveindent
+"set noexpandtab
+"set softtabstop=4
+"set shiftwidth=4
+"set tabstop=4
+"set autoindent
+
+set shiftwidth=4 
+set tabstop=4
+set shiftwidth=4
+set expandtab
+
 set backspace=indent,eol,start                             " backspace through everything in insert mode
 set number
 set hlsearch                                               " highlight matches
@@ -54,7 +66,6 @@ set iskeyword-=.                                           " '.' is an end of wo
 set iskeyword-=#                                           " '#' is an end of word designator
 set iskeyword-=-                                           " '-' is an end of word designator
 set showmatch                                              " Show matching brackets/parenthesis
-set autoindent
 set completeopt-=preview
 set cmdheight=2                                            " the height of the command line
 set guitablabel=%N\ \ %t\ %M
@@ -71,15 +82,6 @@ set sessionoptions-=blank
 " ignore patterns for ctrlp, etc.
 set wildignore+=*/tmp/*,*.so,*.swp,call.min.js,all.min.css 
 set omnifunc=syntaxcomplete#Complete                       " enable autocomplete/syntax highlighting
-set ofu=syntaxcomplete#Complete
-autocmd FileType php set omnifunc=phpcomplete#CompletePHP
-autocmd FileType phtml set omnifunc=phpcomplete#CompletePHP
-autocmd FileType python set omnifunc=pythoncomplete#Complete
-autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
-autocmd FileType css set omnifunc=csscomplete#CompleteCSS
-autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
-autocmd FileType c set omnifunc=ccomplete#Complete
 
 " color schemes
 set background=dark
@@ -106,9 +108,6 @@ let g:gitgutter_sign_column_always = 1
 let g:UltiSnipsExpandTrigger="<c-e>"
 let g:UltiSnipsListSnippets="<c-l>"
 
-"inoremap <C-Space> <C-x><C-o>
-nnoremap <C-Left>  :tabprevious<CR>
-nnoremap <C-Right> :tabnext<CR>
 "-----------------------------------------------
 " autocomplete selection improvements
 " http://vim.wikia.com/wiki/Make_Vim_completion_popup_menu_work_just_like_in_an_IDE
