@@ -67,13 +67,14 @@ set iskeyword-=#                                           " '#' is an end of wo
 set iskeyword-=-                                           " '-' is an end of word designator
 set showmatch                                              " Show matching brackets/parenthesis
 set completeopt-=preview
-set cmdheight=2                                            " the height of the command line
-set guitablabel=%N\ \ %t\ %M
-set nobackup                                               " no backup/swap files
+set cmdheight=2                                   
+set showtabline=2
+set guitablabel=%N/\ %t\ %M
+set nobackup                                               
 set nowb
 set noswapfile
 set completeopt-=preview                                   " dont show me preview/scratch window when auto-completing
-"set completeopt=menu                                       " show me menu of completion options
+"set completeopt=menu                                      " show me menu of completion options
 set completeopt=longest,menuone
 set wildmode=longest,list:longest
 set sessionoptions-=options                                " never save any vim options with the session!
@@ -82,15 +83,23 @@ set sessionoptions-=blank
 " ignore patterns for ctrlp, etc.
 set wildignore+=*/tmp/*,*.so,*.swp,call.min.js,all.min.css 
 set omnifunc=syntaxcomplete#Complete                       " enable autocomplete/syntax highlighting
+set ofu=syntaxcomplete#Complete
+autocmd FileType php set omnifunc=phpcomplete#CompletePHP
+autocmd FileType phtml set omnifunc=phpcomplete#CompletePHP
+autocmd FileType python set omnifunc=pythoncomplete#Complete
+autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
+autocmd FileType css set omnifunc=csscomplete#CompleteCSS
+autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
+autocmd FileType c set omnifunc=ccomplete#Complete
 
-" color schemes
 set background=dark
 colorscheme solarized
 highlight SignColumn guibg=#073642                         
 highlight SignColumn ctermbg=#073642
 
 if has('gui_running')
-    set guifont=Consolas:h14                                " font family and size
+    set guifont=Consolas:h14                                
 endif
 
 let g:go_fmt_command = "goimports"
@@ -100,7 +109,7 @@ let g:go_highlight_structs = 1
 let g:go_snippet_engine = "ultisnips"
 let g:ctrlp_working_path_mode = ''
 let g:ctrlp_by_filename = 1
-let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git\|_diffs\|_uploads'
+let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git\|_diffs\|_uploads\|build'
 let g:ctrlp_clear_cache_on_exit = 1
 let g:ctrlp_open_new_file = 'v'
 let g:ctrlp_match_window = 'bottom,order:ttb'
@@ -113,12 +122,9 @@ let g:UltiSnipsListSnippets="<c-l>"
 " http://vim.wikia.com/wiki/Make_Vim_completion_popup_menu_work_just_like_in_an_IDE
 " ----------------------------------------------
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-inoremap <expr> <C-n> pumvisible() ? '<C-n>' :
-  \ '<C-n><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
-inoremap <expr> <M-,> pumvisible() ? '<C-n>' :
-  \ '<C-x><C-o><C-n><C-p><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
+inoremap <expr> <C-n> pumvisible() ? '<C-n>' : \ '<C-n><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
+inoremap <expr> <M-,> pumvisible() ? '<C-n>' : \ '<C-x><C-o><C-n><C-p><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
 
-" default handling of Markdown files
 autocmd BufNewFile,BufReadPost *.md set filetype=markdown
 " get rid of background color when highlighing brackets
 hi MatchParen guibg=NONE guifg=YELLOW
