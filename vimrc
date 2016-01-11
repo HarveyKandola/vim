@@ -10,7 +10,8 @@ Plugin 'airblade/vim-gitgutter'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'godlygeek/tabular'
 Plugin 'tpope/vim-surround.git'
-Plugin 'kien/ctrlp.vim'
+Plugin 'tpope/vim-fugitive.git'
+Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'SirVer/ultisnips'
 Plugin 'mklabs/grunt.vim'
@@ -82,8 +83,6 @@ set sessionoptions-=help
 set sessionoptions-=blank
 set mouse=a
 set scrolloff=5
-" Automatically reload the .vimrc when changes are made to it
-au! BufWritePost .vimrc source %
 " Multiple windows are equally sized and open in reading order.
 set equalalways
 set splitbelow splitright
@@ -112,6 +111,13 @@ autocmd BufNewFile,BufRead *.min.js set filetype=min.js
 autocmd FileType min.js setlocal syntax=javascript
 
 "------------------------------------------------------------------------------
+" Buffers
+nnoremap <F2> :buffers<CR>:buffer<Space>
+nnoremap <Tab> :bnext<CR>
+nnoremap <S-Tab> :bprevious<CR>
+nnoremap <F3> :bdelete<CR>
+
+"------------------------------------------------------------------------------
 " Golang
 let g:go_highlight_functions = 1
 let g:go_highlight_methods = 1
@@ -120,18 +126,26 @@ let g:go_highlight_operators = 1
 let g:go_highlight_build_constraints = 1
 let g:go_fmt_command = "goimports"
 let g:go_snippet_engine = "ultisnips"
+au FileType go nmap <F5> :GoDef<CR>
+au FileType go nmap <F6> :GoCallers<CR>
+au FileType go nmap <F7> :GoCallees<CR>
+au FileType go nmap <F12> <Plug>(go-rename)
 
 "------------------------------------------------------------------------------
 " CTRL-P
-set wildignore+=*/tmp/*,*.so,*.swp,all.min.js,all.min.css 
-let g:ctrlp_working_path_mode = ''
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip,all.min.js,all.min.css,*/dist/*,*/dist-prod/*
+let g:ctrlp_working_path_mode = 'r'
 let g:ctrlp_by_filename = 1
-let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git\|_diffs\|_uploads\|build\|tmp\|tests\|dist\|bower_components'
+let g:ctrlp_custom_ignore = { 
+            \ 'dir': '\.git$\|\.hg$\|\.svn$\|bower_components$\|dist$\|_uploads$\|_convert$\|tmp$\|_diffs$\|dist-prod$\|node_modules$\|project_files$\|test$', 
+            \ 'file': '\.exe$\|\.so$\|\.dll$\|\.pyc$'
+            \ }
+"let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git\|_diffs\|_uploads\|build\|tmp\|tests\|dist\|dist-prod\|bower_components'
 let g:ctrlp_clear_cache_on_exit = 1
 let g:ctrlp_open_new_file = 'v'
 let g:ctrlp_match_window = 'bottom,order:ttb'
 " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
-let g:ctrlp_user_command = 'ag %s -l -g ""'
+"let g:ctrlp_user_command = 'ag %s -l -g ""'
 let g:ctrlp_match_window = 'results:30'    
 
 "------------------------------------------------------------------------------
@@ -151,6 +165,8 @@ set background=dark
 colorscheme solarized
 highlight SignColumn guibg=#073642                         
 "highlight SignColumn ctermbg=#073642
+"remove search highlighting
+nnoremap <silent> <esc> :noh<cr><esc>
 
 "------------------------------------------------------------------------------
 " Code folding
@@ -187,7 +203,13 @@ let g:syntastic_mode_map = { 'mode': 'active',
 let g:syntastic_javascript_checkers = ['jshint']
 "let g:syntastic_go_checkers = ['go', 'golint']
 let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
-let g:airline_powerline_fonts = 1
 let g:syntastic_error_symbol = '✗'
 let g:syntastic_warning_symbol = '!'
+
+"------------------------------------------------------------------------------
+" Airline Status
+let g:airline_powerline_fonts = 1
+let g:airline_theme = 'dark'
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#fnamemod = ':t'
 
