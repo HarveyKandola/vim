@@ -28,6 +28,7 @@ Plugin 'eiginn/netrw'
 Plugin 'scrooloose/syntastic'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'mustache/vim-mustache-handlebars'
+Plugin 'rizzatti/dash.vim'
 
 call vundle#end()
 
@@ -104,6 +105,8 @@ inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 inoremap <expr> <C-n> pumvisible() ? '<C-n>' : \ '<C-n><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
 inoremap <expr> <M-,> pumvisible() ? '<C-n>' : \ '<C-x><C-o><C-n><C-p><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
 
+let g:omni_sql_no_default_maps = 1
+
 "------------------------------------------------------------------------------
 " File type mappings
 autocmd BufNewFile,BufReadPost *.md set filetype=markdown
@@ -111,11 +114,19 @@ autocmd BufNewFile,BufRead *.min.js set filetype=min.js
 autocmd FileType min.js setlocal syntax=javascript
 
 "------------------------------------------------------------------------------
-" Buffers
+" Key mappings
 nnoremap <F2> :buffers<CR>:buffer<Space>
 nnoremap <Tab> :bnext<CR>
 nnoremap <S-Tab> :bprevious<CR>
 nnoremap <F3> :bdelete<CR>
+nnoremap <F4> :vs<CR>
+nnoremap <F5> :sp<CR>
+nmap <F9> :Dash<CR>
+au FileType go nmap <F10> :GoDef<CR>
+"au FileType go nmap <F6> :GoCallers<CR>
+"au FileType go nmap <F7> :GoCallees<CR>
+au FileType go nmap <F11> :GoReferrers<CR>
+au FileType go nmap <F12> <Plug>(go-rename)
 
 "------------------------------------------------------------------------------
 " Golang
@@ -126,10 +137,6 @@ let g:go_highlight_operators = 1
 let g:go_highlight_build_constraints = 1
 let g:go_fmt_command = "goimports"
 let g:go_snippet_engine = "ultisnips"
-au FileType go nmap <F5> :GoDef<CR>
-au FileType go nmap <F6> :GoCallers<CR>
-au FileType go nmap <F7> :GoCallees<CR>
-au FileType go nmap <F12> <Plug>(go-rename)
 
 "------------------------------------------------------------------------------
 " CTRL-P
