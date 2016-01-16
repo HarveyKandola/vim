@@ -1,3 +1,12 @@
+"
+" You might need to install these on OSX:
+" 
+" brew install ctags
+" go get -u github.com/jstemmer/gotags
+" npm install -g git+https://github.com/ramitos/jsctags.git
+" npm install -g jshint
+"
+
 set nocompatible                " choose no compatibility with legacy vi
 filetype off
 
@@ -29,6 +38,10 @@ Plugin 'scrooloose/syntastic'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'mustache/vim-mustache-handlebars'
 Plugin 'rizzatti/dash.vim'
+Plugin 'Shutnik/jshint2.vim'
+Plugin 'majutsushi/tagbar'
+Plugin 'othree/html5.vim'
+Plugin 'ternjs/tern_for_vim'
 
 call vundle#end()
 
@@ -112,19 +125,21 @@ let g:omni_sql_no_default_maps = 1
 autocmd BufNewFile,BufReadPost *.md set filetype=markdown
 autocmd BufNewFile,BufRead *.min.js set filetype=min.js
 autocmd FileType min.js setlocal syntax=javascript
+autocmd BufNewFile,BufRead *.less set filetype=less
+autocmd FileType less set omnifunc=csscomplete#CompleteCSS
 
 "------------------------------------------------------------------------------
 " Key mappings
-nnoremap <F2> :buffers<CR>:buffer<Space>
 nnoremap <Tab> :bnext<CR>
 nnoremap <S-Tab> :bprevious<CR>
+nnoremap <F2> :buffers<CR>:buffer<Space>
 nnoremap <F3> :bdelete<CR>
 nnoremap <F4> :vs<CR>
 nnoremap <F5> :sp<CR>
-nmap <F9> :Dash<CR>
+nnoremap <F6> <C-w>w
+nnoremap <F7> :TagbarToggle<CR>
+nnoremap <F9> :Dash<CR>
 au FileType go nmap <F10> :GoDef<CR>
-"au FileType go nmap <F6> :GoCallers<CR>
-"au FileType go nmap <F7> :GoCallees<CR>
 au FileType go nmap <F11> :GoReferrers<CR>
 au FileType go nmap <F12> <Plug>(go-rename)
 
@@ -137,6 +152,33 @@ let g:go_highlight_operators = 1
 let g:go_highlight_build_constraints = 1
 let g:go_fmt_command = "goimports"
 let g:go_snippet_engine = "ultisnips"
+"let g:tagbar_type_go = {
+    "\ 'ctagstype' : 'go',
+    "\ 'kinds'     : [
+        "\ 'p:package',
+        "\ 'i:imports:1',
+        "\ 'c:constants',
+        "\ 'v:variables',
+        "\ 't:types',
+        "\ 'n:interfaces',
+        "\ 'w:fields',
+        "\ 'e:embedded',
+        "\ 'm:methods',
+        "\ 'r:constructor',
+        "\ 'f:functions'
+    "\ ],
+    "\ 'sro' : '.',
+    "\ 'kind2scope' : {
+        "\ 't' : 'ctype',
+        "\ 'n' : 'ntype'
+    "\ },
+    "\ 'scope2kind' : {
+        "\ 'ctype' : 't',
+        "\ 'ntype' : 'n'
+    "\ },
+    "\ 'ctagsbin'  : 'gotags',
+    "\ 'ctagsargs' : '-sort -silent'
+"\ }
 
 "------------------------------------------------------------------------------
 " CTRL-P
@@ -204,14 +246,19 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
+let g:syntastic_loc_list_height = 5
+let g:syntastic_warning_symbol = '!'
+let g:syntastic_style_error_symbol = '!'
+let g:syntastic_style_warning_symbol = '!'
 let g:syntastic_mode_map = { 'mode': 'active',
-    \ 'active_filetypes': [],
-    \ 'passive_filetypes': ['html', 'min.js', 'go'] }
+    \ 'active_filetypes': ['js', 'go'],
+    \ 'passive_filetypes': ['html', 'min.js'] }
+let g:syntastic_ignore_files = ['\.min\.js$', '\.min\.css$']
 let g:syntastic_javascript_checkers = ['jshint']
-"let g:syntastic_go_checkers = ['go', 'golint']
 let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
 let g:syntastic_error_symbol = '✗'
 let g:syntastic_warning_symbol = '!'
+let g:syntastic_enable_signs=1
 
 "------------------------------------------------------------------------------
 " Airline Status
