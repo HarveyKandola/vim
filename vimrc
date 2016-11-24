@@ -5,6 +5,10 @@
 " go get -u github.com/jstemmer/gotags
 " npm install -g git+https://github.com/ramitos/jsctags.git
 " npm install -g jshint
+" https://github.com/ryanoasis/vim-devicons
+"
+" cd ~/.vim/bundle/YouCompleteMe
+" ./install.py --clang-completer --gocode-completer  --tern-completer
 "
 
 set nocompatible                " choose no compatibility with legacy vi
@@ -13,8 +17,10 @@ filetype off
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
-Plugin 'gmarik/Vundle.vim'
-Plugin 'bling/vim-airline'
+Plugin 'VundleVim/Vundle.vim'
+"Plugin 'gmarik/Vundle.vim'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'godlygeek/tabular'
@@ -22,7 +28,6 @@ Plugin 'tpope/vim-surround.git'
 Plugin 'tpope/vim-fugitive.git'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'Valloric/YouCompleteMe'
-Plugin 'SirVer/ultisnips'
 Plugin 'mklabs/grunt.vim'
 Plugin 'fatih/vim-go'
 Plugin 'vim-scripts/sessionman.vim'
@@ -36,13 +41,14 @@ Plugin 'groenewege/vim-less'
 Plugin 'eiginn/netrw'
 Plugin 'scrooloose/syntastic'
 Plugin 'scrooloose/nerdcommenter'
+Plugin 'scrooloose/nerdtree'
 Plugin 'mustache/vim-mustache-handlebars'
 Plugin 'rizzatti/dash.vim'
 Plugin 'Shutnik/jshint2.vim'
 Plugin 'majutsushi/tagbar'
 Plugin 'othree/html5.vim'
 Plugin 'ternjs/tern_for_vim'
-
+Plugin 'kburdett/vim-nuuid'
 call vundle#end()
 
 filetype plugin indent on  
@@ -50,9 +56,10 @@ syntax enable                                              " enable as opposed t
 
 "------------------------------------------------------------------------------
 " General defaults
+let mapleader = ","
 set encoding=utf-8
 set showcmd                                                " display incomplete commands
-"set nowrap                                                 " don't wrap lines
+set nowrap                                                 " don't wrap lines
 set shiftwidth=4 
 set tabstop=4
 set shiftwidth=4
@@ -129,29 +136,17 @@ autocmd BufNewFile,BufRead *.less set filetype=less
 autocmd FileType less set omnifunc=csscomplete#CompleteCSS
 
 "------------------------------------------------------------------------------
-" Key mappings
-nnoremap <Tab> :bnext<CR>
-nnoremap <S-Tab> :bprevious<CR>
-nnoremap <F2> :buffers<CR>:buffer<Space>
-nnoremap <F3> :bdelete<CR>
-nnoremap <F4> :vs<CR>
-nnoremap <F5> :sp<CR>
-nnoremap <F6> <C-w>w
-nnoremap <F7> :TagbarToggle<CR>
-nnoremap <F9> :Dash<CR>
-au FileType go nmap <F10> :GoDef<CR>
-au FileType go nmap <F11> :GoReferrers<CR>
-au FileType go nmap <F12> <Plug>(go-rename)
-
-"------------------------------------------------------------------------------
 " Golang
 let g:go_highlight_functions = 1
 let g:go_highlight_methods = 1
 let g:go_highlight_structs = 1
 let g:go_highlight_operators = 1
 let g:go_highlight_build_constraints = 1
-let g:go_fmt_command = "goimports"
+let g:go_fmt_command = "gofmt"
 let g:go_snippet_engine = "ultisnips"
+let g:go_metalinter_deadline = "5s"
+let g:go_gocode_unimported_packages = 1
+
 "let g:tagbar_type_go = {
     "\ 'ctagstype' : 'go',
     "\ 'kinds'     : [
@@ -175,21 +170,20 @@ let g:go_snippet_engine = "ultisnips"
     "\ 'scope2kind' : {
         "\ 'ctype' : 't',
         "\ 'ntype' : 'n'
-    "\ },
+    "\ }C$,
     "\ 'ctagsbin'  : 'gotags',
     "\ 'ctagsargs' : '-sort -silent'
-"\ }
 
 "------------------------------------------------------------------------------
 " CTRL-P
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip,all.min.js,all.min.css,*/dist/*,*/dist-prod/*
 let g:ctrlp_working_path_mode = 'r'
-let g:ctrlp_by_filename = 1
+let g:ctrlp_by_filename = 0
+
 let g:ctrlp_custom_ignore = { 
             \ 'dir': '\.git$\|\.hg$\|\.svn$\|bower_components$\|dist$\|_uploads$\|_convert$\|tmp$\|_diffs$\|dist-prod$\|node_modules$\|project_files$\|test$', 
             \ 'file': '\.exe$\|\.so$\|\.dll$\|\.pyc$'
             \ }
-"let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git\|_diffs\|_uploads\|build\|tmp\|tests\|dist\|dist-prod\|bower_components'
 let g:ctrlp_clear_cache_on_exit = 1
 let g:ctrlp_open_new_file = 'v'
 let g:ctrlp_match_window = 'bottom,order:ttb'
@@ -209,11 +203,11 @@ let g:UltiSnipsListSnippets="<c-l>"
 "------------------------------------------------------------------------------
 " Colors
 " get rid of background color when highlighing brackets
+set t_Co=256
 hi MatchParen guibg=NONE guifg=YELLOW
 set background=dark
 colorscheme solarized
 highlight SignColumn guibg=#073642                         
-"highlight SignColumn ctermbg=#073642
 "remove search highlighting
 nnoremap <silent> <esc> :noh<cr><esc>
 
@@ -224,7 +218,7 @@ set foldmethod=manual   "fold based on indent
 set foldnestmax=10      "deepest fold is 10 levels
 set nofoldenable        "dont fold by default
 "set foldlevel=1         "this is just what i use
-function! NeatFoldText() "{{{2
+function! NeatFoldText() "{{{2}}}"  
   let line = ' ' . substitute(getline(v:foldstart), '^\s*"\?\s*\|\s*"\?\s*{{' . '{\d*\s*', '', 'g') . ' '
   let lines_count = v:foldend - v:foldstart + 1
   let lines_count_text = '| ' . printf("%10s", lines_count . ' lines') . ' |'
@@ -251,8 +245,8 @@ let g:syntastic_warning_symbol = '!'
 let g:syntastic_style_error_symbol = '!'
 let g:syntastic_style_warning_symbol = '!'
 let g:syntastic_mode_map = { 'mode': 'active',
-    \ 'active_filetypes': ['js', 'go'],
-    \ 'passive_filetypes': ['html', 'min.js'] }
+    \ 'active_filetypes': ['js'],
+    \ 'passive_filetypes': ['html', 'min.js', 'go'] }
 let g:syntastic_ignore_files = ['\.min\.js$', '\.min\.css$']
 let g:syntastic_javascript_checkers = ['jshint']
 let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
@@ -263,7 +257,31 @@ let g:syntastic_enable_signs=1
 "------------------------------------------------------------------------------
 " Airline Status
 let g:airline_powerline_fonts = 1
-let g:airline_theme = 'dark'
+let g:airline_theme = 'solarized'
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#fnamemod = ':t'
 
+let tern#is_show_argument_hints_enabled = 1
+
+"------------------------------------------------------------------------------
+" NETRW
+let g:netrw_liststyle=3         " tree
+let g:netrw_banner=0            " no banner
+let g:netrw_altv=1              " open files on right
+let g:netrw_preview=1           " open previews vertically
+
+"------------------------------------------------------------------------------
+" Key mappings
+nnoremap <Tab> :bnext<CR>
+nnoremap <S-Tab> :bprevious<CR>
+nnoremap <F2> :buffers<CR>:buffer<Space>
+nnoremap <F3> :bdelete<CR>
+nnoremap <F4> :sp<CR>
+nnoremap <F5> :vs<CR>
+nnoremap <F6> <C-w>w
+nnoremap <F7> <C-w>q
+nnoremap <F8> :TagbarToggle<CR>
+nnoremap <F9> :Dash<CR>
+au FileType go nmap <F10> :GoDef<CR>
+au FileType go nmap <F11> :GoReferrers<CR>
+au FileType go nmap <F12> <Plug>(go-rename)
