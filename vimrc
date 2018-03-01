@@ -18,11 +18,12 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
 Plugin 'VundleVim/Vundle.vim'
-"Plugin 'gmarik/Vundle.vim'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'altercation/vim-colors-solarized'
+Plugin 'skielbasa/vim-material-monokai'
+Plugin 'morhetz/gruvbox'
 Plugin 'godlygeek/tabular'
 Plugin 'tpope/vim-surround.git'
 Plugin 'tpope/vim-fugitive.git'
@@ -42,21 +43,22 @@ Plugin 'eiginn/netrw'
 Plugin 'scrooloose/syntastic'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'scrooloose/nerdtree'
+Plugin 'Xuyuanp/nerdtree-git-plugin'
 Plugin 'mustache/vim-mustache-handlebars'
-Plugin 'rizzatti/dash.vim'
 Plugin 'Shutnik/jshint2.vim'
 Plugin 'majutsushi/tagbar'
 Plugin 'othree/html5.vim'
 Plugin 'ternjs/tern_for_vim'
 Plugin 'kburdett/vim-nuuid'
+Plugin 'mhinz/vim-signify'
 call vundle#end()
 
+filetype plugin on
 filetype plugin indent on  
 syntax enable                                              " enable as opposed to on (keeps theme colors)
 
 "------------------------------------------------------------------------------
 " General defaults
-let mapleader = ","
 set encoding=utf-8
 set showcmd                                                " display incomplete commands
 set nowrap                                                 " don't wrap lines
@@ -88,7 +90,7 @@ set showmatch                                              " Show matching brack
 set completeopt-=preview
 set cmdheight=2                                   
 set showtabline=2
-set guifont=Source\ Code\ Pro\ for\ Powerline:h14
+set guifont=Source\ Code\ Pro\ for\ Powerline:h15
 set cursorline
 set guioptions+=e
 " this next line is now in .gvimrc
@@ -107,6 +109,8 @@ set scrolloff=5
 " Multiple windows are equally sized and open in reading order.
 set equalalways
 set splitbelow splitright
+" Set the working directory to wherever the open file lives
+set autochdir
 
 "------------------------------------------------------------------------------
 " Auto-complete file types
@@ -146,6 +150,7 @@ let g:go_fmt_command = "gofmt"
 let g:go_snippet_engine = "ultisnips"
 let g:go_metalinter_deadline = "5s"
 let g:go_gocode_unimported_packages = 1
+let g:go_fmt_experimental = 1
 
 "let g:tagbar_type_go = {
     "\ 'ctagstype' : 'go',
@@ -179,7 +184,6 @@ let g:go_gocode_unimported_packages = 1
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip,all.min.js,all.min.css,*/dist/*,*/dist-prod/*
 let g:ctrlp_working_path_mode = 'r'
 let g:ctrlp_by_filename = 0
-
 let g:ctrlp_custom_ignore = { 
             \ 'dir': '\.git$\|\.hg$\|\.svn$\|bower_components$\|dist$\|_uploads$\|_convert$\|tmp$\|_diffs$\|dist-prod$\|node_modules$\|project_files$\|test$', 
             \ 'file': '\.exe$\|\.so$\|\.dll$\|\.pyc$'
@@ -193,7 +197,8 @@ let g:ctrlp_match_window = 'results:30'
 
 "------------------------------------------------------------------------------
 " Git
-let g:gitgutter_sign_column_always = 1
+"let g:gitgutter_sign_column_always = 1
+set signcolumn=yes
 
 "------------------------------------------------------------------------------
 " Snippets
@@ -203,11 +208,15 @@ let g:UltiSnipsListSnippets="<c-l>"
 "------------------------------------------------------------------------------
 " Colors
 " get rid of background color when highlighing brackets
-set t_Co=256
 hi MatchParen guibg=NONE guifg=YELLOW
 set background=dark
-colorscheme solarized
-highlight SignColumn guibg=#073642                         
+"colorscheme material-monokai 
+colorscheme gruvbox
+let g:gruvbox_contrast_dark = 'hard'
+let g:gruvbox_bold = 0
+"let g:materialmonokai_italic=1
+" solarized
+"highlight SignColumn guibg=#073642                         
 "remove search highlighting
 nnoremap <silent> <esc> :noh<cr><esc>
 
@@ -253,15 +262,26 @@ let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
 let g:syntastic_error_symbol = '✗'
 let g:syntastic_warning_symbol = '!'
 let g:syntastic_enable_signs=1
+let g:syntastic_javascript_checkers=['eslint']
 
 "------------------------------------------------------------------------------
 " Airline Status
 let g:airline_powerline_fonts = 1
-let g:airline_theme = 'solarized'
+"let g:airline_theme = 'solarized'
+"let g:airline_theme = 'materialmonokai'
+let g:airline_theme = 'gruvbox'
 let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#left_alt_sep = '|'
+let g:airline#extensions#tabline#formatter = 'unique_tail'
 let g:airline#extensions#tabline#fnamemod = ':t'
-
+let g:airline_exclude_filetypes = ['nerdtree']
 let tern#is_show_argument_hints_enabled = 1
+let g:airline_skip_empty_sections = 1
+let g:airline_section_b=''
+let g:airline_section_x=''
+let g:airline_section_y=''
+let g:airline_section_z=''
 
 "------------------------------------------------------------------------------
 " NETRW
@@ -270,8 +290,23 @@ let g:netrw_banner=0            " no banner
 let g:netrw_altv=1              " open files on right
 let g:netrw_preview=1           " open previews vertically
 
+nmap \e :NERDTreeToggle<CR>
+
+"------------------------------------------------------------------------------
+"" ripgrep
+if executable('rg')
+  let g:ctrlp_user_command = 'rg --files %s'
+  let g:ctrlp_use_caching = 0
+  let g:ctrlp_working_path_mode = 'ra'
+  let g:ctrlp_switch_buffer = 'et'
+endif
+
 "------------------------------------------------------------------------------
 " Key mappings
+"vnoremap <jk> <Esc>
+"inoremap <jk> <Esc>
+"inoremap <Esc> <nop>
+"vnoremap <Esc> <nop>
 nnoremap <Tab> :bnext<CR>
 nnoremap <S-Tab> :bprevious<CR>
 nnoremap <F2> :buffers<CR>:buffer<Space>
