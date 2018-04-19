@@ -15,6 +15,8 @@ set nocompatible                " choose no compatibility with legacy vi
 filetype off
 
 set rtp+=~/.vim/bundle/Vundle.vim
+set rtp+=/usr/local/opt/fzf
+
 call vundle#begin()
 
 Plugin 'VundleVim/Vundle.vim'
@@ -22,9 +24,7 @@ Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'altercation/vim-colors-solarized'
-Plugin 'skielbasa/vim-material-monokai'
 Plugin 'morhetz/gruvbox'
-Plugin 'godlygeek/tabular'
 Plugin 'tpope/vim-surround.git'
 Plugin 'tpope/vim-fugitive.git'
 Plugin 'ctrlpvim/ctrlp.vim'
@@ -34,23 +34,20 @@ Plugin 'fatih/vim-go'
 Plugin 'vim-scripts/sessionman.vim'
 Plugin 'vim-scripts/Auto-Pairs.git'
 Plugin 'rking/ag.vim'
-Plugin 'Raimondi/delimitMate'
 Plugin 'docunext/closetag.vim'
 Plugin 'pangloss/vim-javascript'
 Plugin 'jelera/vim-javascript-syntax'
-Plugin 'groenewege/vim-less'
-Plugin 'eiginn/netrw'
 Plugin 'scrooloose/syntastic'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'scrooloose/nerdtree'
-Plugin 'Xuyuanp/nerdtree-git-plugin'
 Plugin 'mustache/vim-mustache-handlebars'
 Plugin 'Shutnik/jshint2.vim'
 Plugin 'majutsushi/tagbar'
 Plugin 'othree/html5.vim'
 Plugin 'ternjs/tern_for_vim'
-Plugin 'kburdett/vim-nuuid'
-Plugin 'mhinz/vim-signify'
+Plugin 'cakebaker/scss-syntax.vim'
+Plugin 'plasticboy/vim-markdown'
+Plugin 'cespare/vim-toml'
 call vundle#end()
 
 filetype plugin on
@@ -65,6 +62,7 @@ set nowrap                                                 " don't wrap lines
 set shiftwidth=4 
 set tabstop=4
 set shiftwidth=4
+set colorcolumn=80
 set expandtab
 set backspace=indent,eol,start                             " backspace through everything in insert mode
 set number
@@ -214,6 +212,8 @@ set background=dark
 colorscheme gruvbox
 let g:gruvbox_contrast_dark = 'hard'
 let g:gruvbox_bold = 0
+let g:gruvbox_invert_tabline = 1
+let g:gruvbox_vert_split = 'orange'
 "let g:materialmonokai_italic=1
 " solarized
 "highlight SignColumn guibg=#073642                         
@@ -291,15 +291,30 @@ let g:netrw_altv=1              " open files on right
 let g:netrw_preview=1           " open previews vertically
 
 nmap \e :NERDTreeToggle<CR>
+"map <C-n> :NERDTreeToggle<CR>
 
 "------------------------------------------------------------------------------
 "" ripgrep
 if executable('rg')
-  let g:ctrlp_user_command = 'rg --files %s'
-  let g:ctrlp_use_caching = 0
-  let g:ctrlp_working_path_mode = 'ra'
-  let g:ctrlp_switch_buffer = 'et'
+    let g:ctrlp_user_command = 'rg --files %s'
+    let g:ctrlp_use_caching = 0
+    let g:ctrlp_working_path_mode = 'ra'
+    let g:ctrlp_switch_buffer = 'et'
+    set grepprg=rg\ --vimgrep\ --no-heading
+    set grepformat=%f:%l:%c:%m,%f:%l:%m
 endif
+
+" --column: Show column number
+" --line-number: Show line number
+" --no-heading: Do not show file headings in results
+" --fixed-strings: Search term as a literal string
+" --ignore-case: Case insensitive search
+" --no-ignore: Do not respect .gitignore, etc...
+" --hidden: Search hidden files and folders
+" --follow: Follow symlinks
+" --glob: Additional conditions for search (in this case ignore everything in the .git/ folder)
+" --color: Search color options
+command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>), 1, <bang>0)
 
 "------------------------------------------------------------------------------
 " Key mappings
