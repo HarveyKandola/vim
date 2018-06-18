@@ -11,20 +11,16 @@
 " ./install.py --clang-completer --gocode-completer  --tern-completer
 "
 
-set nocompatible                " choose no compatibility with legacy vi
 filetype off
 
 set rtp+=~/.vim/bundle/Vundle.vim
 set rtp+=/usr/local/opt/fzf
 
 call vundle#begin()
-
 Plugin 'VundleVim/Vundle.vim'
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
+Plugin 'itchyny/lightline.vim'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'altercation/vim-colors-solarized'
-Plugin 'morhetz/gruvbox'
 Plugin 'tpope/vim-surround.git'
 Plugin 'tpope/vim-fugitive.git'
 Plugin 'ctrlpvim/ctrlp.vim'
@@ -59,12 +55,12 @@ syntax enable                                              " enable as opposed t
 set encoding=utf-8
 set showcmd                                                " display incomplete commands
 set nowrap                                                 " don't wrap lines
-set shiftwidth=4 
 set tabstop=4
+set softtabstop=4
 set shiftwidth=4
-set colorcolumn=80
 set expandtab
 set backspace=indent,eol,start                             " backspace through everything in insert mode
+set colorcolumn=80
 set number
 set hlsearch                                               " highlight matches
 set incsearch                                              " incremental searching
@@ -208,15 +204,8 @@ let g:UltiSnipsListSnippets="<c-l>"
 " get rid of background color when highlighing brackets
 hi MatchParen guibg=NONE guifg=YELLOW
 set background=dark
-"colorscheme material-monokai 
-colorscheme gruvbox
-let g:gruvbox_contrast_dark = 'hard'
-let g:gruvbox_bold = 0
-let g:gruvbox_invert_tabline = 1
-let g:gruvbox_vert_split = 'orange'
-"let g:materialmonokai_italic=1
-" solarized
-"highlight SignColumn guibg=#073642                         
+colorscheme solarized
+highlight SignColumn guibg=#073642                         
 "remove search highlighting
 nnoremap <silent> <esc> :noh<cr><esc>
 
@@ -265,23 +254,10 @@ let g:syntastic_enable_signs=1
 let g:syntastic_javascript_checkers=['eslint']
 
 "------------------------------------------------------------------------------
-" Airline Status
-let g:airline_powerline_fonts = 1
-"let g:airline_theme = 'solarized'
-"let g:airline_theme = 'materialmonokai'
-let g:airline_theme = 'gruvbox'
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#left_sep = ' '
-let g:airline#extensions#tabline#left_alt_sep = '|'
-let g:airline#extensions#tabline#formatter = 'unique_tail'
-let g:airline#extensions#tabline#fnamemod = ':t'
-let g:airline_exclude_filetypes = ['nerdtree']
-let tern#is_show_argument_hints_enabled = 1
-let g:airline_skip_empty_sections = 1
-let g:airline_section_b=''
-let g:airline_section_x=''
-let g:airline_section_y=''
-let g:airline_section_z=''
+" Status Line
+let g:lightline = {
+      \ 'colorscheme': 'solarized',
+      \ }
 
 "------------------------------------------------------------------------------
 " NETRW
@@ -318,10 +294,10 @@ command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-h
 
 "------------------------------------------------------------------------------
 " Key mappings
-"vnoremap <jk> <Esc>
-"inoremap <jk> <Esc>
-"inoremap <Esc> <nop>
-"vnoremap <Esc> <nop>
+nnoremap <Right> <C-w>l
+nnoremap <Left> <C-w>h
+nnoremap <Up> <C-w>k
+nnoremap <Down> <C-w>j
 nnoremap <Tab> :bnext<CR>
 nnoremap <S-Tab> :bprevious<CR>
 nnoremap <F2> :buffers<CR>:buffer<Space>
